@@ -1,0 +1,217 @@
+openapi: 3.0.1
+info:
+  title: API Driven development Demo
+  version: 1.0.0
+  description: 'Tutorial for api first development'
+
+servers:
+  - url: /api
+    description: base url for dev env
+
+tags:
+  - name: post
+    description: Operations about post
+
+paths:
+  /v1/posts:
+    get:
+      tags:
+        - post
+      summary: Get All Posts
+      operationId: getAllPosts
+      responses:
+        200:
+          description: Successful operation and get all posts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPostsResponse'
+
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - post
+      summary: add new post
+      operationId: addPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPostRequestBody'
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPostResponse'
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/posts/{postId}:
+    get:
+      tags:
+        - post
+      summary: get post by post id
+      operationId: getPostById
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
+        404:
+          description: not found - incase post id not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - post
+      summary: delete post by id
+      operationId: deletePostById
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      responses:
+        204:
+          description: successful operation
+        404:
+          description: not found - incase post id not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - post
+      summary: update post by post id
+      operationId: updatePostById
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequestBody'
+      responses:
+        204:
+          description: successful operation
+        404:
+          description: not found - incase post id not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+components:
+  parameters:
+    PostIdPathVariable:
+      name: postId
+      in: path
+      description: The postid of post that needs to be deleted
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    GetPostsResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostDto'
+    AddPostResponse:
+      type: object
+      required:
+        - postId
+      properties:
+        postId:
+          type: string
+          format: uuid
+    UpdatePostRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+    AddPostRequestBody:
+      type: object
+      required:
+        - title
+        - authorName
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        authorName:
+          type: string
+    PostDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        authorName:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
