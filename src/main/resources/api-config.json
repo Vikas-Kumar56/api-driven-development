@@ -4,5 +4,6 @@
   "useTags": true,
   "exceptionHandler": false,
   "swaggerAnnotations": false,
-  "interfaceOnly": true
+  "interfaceOnly": false,
+  "delegatePattern": true
 }

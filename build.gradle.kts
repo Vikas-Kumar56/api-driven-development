@@ -39,7 +39,7 @@ openApiGenerate {
 configure<SourceSetContainer> {
 	named("main") {
 		java.srcDir("$buildDir/generated/src/main/kotlin")
-//		java.exclude("**/Application.kt")
+		java.exclude("**/Application.kt")
 	}
 }
 
