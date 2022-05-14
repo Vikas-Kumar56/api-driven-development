@@ -1,0 +1,24 @@
+#springdoc.api-docs.enabled=false
+#springdoc.swagger-ui.url=/open-api.yaml
+springdoc:
+  api-docs:
+    enabled: false
+
+  swagger-ui:
+    url: /open-api.yaml
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: pass
+    hikari:
+      connection-test-query: SELECT 1
+
+  jpa:
+    database: H2
+    show-sql: true
+  h2:
+    console:
+      enabled: true
